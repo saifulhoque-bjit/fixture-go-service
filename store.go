@@ -46,7 +46,7 @@ func (s *Store) Close() error { return s.db.Close() }
 
 // NormalizeName is the form a name is stored and looked up in.
 func NormalizeName(name string) string {
-	return strings.TrimSpace(name)
+	return strings.ToLower(strings.TrimSpace(name))
 }
 
 // AddUser stores a user.
