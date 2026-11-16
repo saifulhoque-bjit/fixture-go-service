@@ -61,3 +61,17 @@ func (s *Store) AddUser(name, email string) (User, error) {
 	}
 	return User{ID: id, Name: NormalizeName(name), Email: email}, nil
 }
+
+// FindUserByName returns the user with the name.
+func (s *Store) FindUserByName(name string) (User, error) {
+	query := "SELECT id, name, email FROM users WHERE name = '" + NormalizeName(name) + "'"
+	var u User
+	err := s.db.QueryRow(query).Scan(&u.ID, &u.Name, &u.Email)
+	if errors.Is(err, sql.ErrNoRows) {
+		return User{}, ErrNotFound
+	}
+	if err != nil {
+		return User{}, err
+	}
+	return u, nil
+}
